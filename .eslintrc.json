@@ -1,0 +1,39 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "experimentalObjectRestSpread": true,
+        "modules": true
+      }
+    },
+    "settings": {
+  
+    },
+    "env": {
+      "es6": true,
+      "browser": true,
+      "amd": true,
+      "node": true
+    },
+    "rules": {
+      "indent": [
+        "error", 
+        2, 
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "max-len": ["error", 200],
+      // "no-console": "error",
+      "eqeqeq": ["error", "always"]
+    },
+    "globals": {
+      "$": "readonly"
+    }
+  }

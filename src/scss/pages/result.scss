@@ -1,0 +1,45 @@
+@import '../base/common.scss';
+#result-page {
+  border: 1px solid black;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  // justify-content: space-around;
+  width: 400px;
+  height: 500px;
+  padding: 10px;
+  box-sizing: border-box;
+  header {
+    // border: 1px solid red;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0px;
+  }
+  main {
+    // border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 250px;
+    margin: 20px 0px;
+    section {
+      text-align: center;
+    }
+    #score-wrapper {
+      margin: 0px 30px;
+    }
+    #time-taken-wrapper {
+      margin: 0px 30px;
+    }
+    #play-wrapper {
+      margin: 0px 70px;
+    }
+    button {
+      @include button;
+    }
+    button:disabled {
+      background-color: #999;
+    }
+  }
+}

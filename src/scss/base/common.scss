@@ -1,0 +1,28 @@
+@import './mixin';
+
+html,
+body {
+  line-height: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  letter-spacing: -0.02em;
+}
+#main-layout {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.titBig {
+  @include titBig;
+}
+.titMiddle {
+  @include titMiddle;
+}
+.titSmall {
+  @include titSmall;
+}
+.bold {
+  font-weight: bold;
+}

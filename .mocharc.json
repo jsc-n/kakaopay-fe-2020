@@ -1,0 +1,12 @@
+{
+    "require": ["@babel/register", "@babel/polyfill"],
+    "recursive": true,
+    "diff": true,
+    "extension": ["js"],
+    "package": "./package.json",
+    "reporter": "spec",
+    "slow": 75,
+    "timeout": 2000,
+    "ui": "bdd",
+    "spec": ["src/**/*.spec.js"]
+  }

@@ -1,0 +1,66 @@
+/* text style */
+$fontBlack100: rgba(0, 0, 0, 1);
+$colorPrimaryPress: #d81d16;
+$colorSecondary: #b98d70;
+$colorBtnFont: white;
+
+$gap: 50px;
+$gap40: 40px;
+
+@mixin verticalCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin titBig {
+  font-size: 25px;
+  line-height: 26px;
+  font-weight: bold;
+}
+
+@mixin titMiddle {
+  font-size: 20px;
+  line-height: 23px;
+}
+
+@mixin titSmall {
+  font-size: 15px;
+  line-height: 21px;
+}
+
+@mixin input {
+  width: 100%;
+  border: 1px solid #ddd;
+  height: 40px;
+  border-radius: 8px;
+  padding: 0 15px;
+  color: #212121;
+  box-sizing: border-box;
+  &:disabled {
+    background: #f2f2f2;
+    color: #999;
+  }
+  &:focus {
+    border: 1px solid #333;
+    color: #000;
+  }
+  outline: 0;
+  text-align: center;
+  @include titSmall;
+}
+
+@mixin button {
+  height: 40px;
+  width: 100%;
+  padding: 0 23px 0 28px;
+  border: 0;
+  border-radius: 20px;
+  background-color: $colorPrimaryPress;
+  color: $colorBtnFont;
+  outline: 0;
+}
+
+@mixin active {
+  background-color: $colorSecondary;
+}
