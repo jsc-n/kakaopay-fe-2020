@@ -1,4 +1,5 @@
 import ResultControl from '../controllers/ResultControl';
+import '../../scss/base/common.scss';
 import '../../scss/pages/result.scss';
 const Result = {
   render: async () => {

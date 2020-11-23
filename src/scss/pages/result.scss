@@ -1,4 +1,4 @@
-@import '../base/common.scss';
+@import '../base/mixin';
 #result-page {
   @include pageLayout;
   header {

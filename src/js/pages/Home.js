@@ -1,4 +1,5 @@
 import PlayControl from '../controllers/PlayControl';
+import '../../scss/base/common.scss';
 import '../../scss/pages/home.scss';
 const Home = {
   render: async () => {
