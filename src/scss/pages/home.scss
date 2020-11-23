@@ -51,6 +51,12 @@
     #play-wrapper {
       margin: 0px 70px;
     }
+    #info-msg-wrapper {
+      height: 20px;
+      #info-msg-area {
+        text-align: center;
+      }
+    }
     button {
       @include button;
     }
