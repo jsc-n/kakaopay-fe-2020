@@ -20,6 +20,9 @@ const Home = {
           <section id="question-wrapper" class='titBig'>
             <div id="question-area">시작 버튼으로 게임 시작</div>
           </section>
+          <section id="info-msg-wrapper"  class='titSmall'>
+            <div id="info-msg-area"></div>
+          </section>
           <section id="answer-wrapper" >
             <input id="answer-input" placeholder="입력" disabled />
           </section>

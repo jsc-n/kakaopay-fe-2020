@@ -1,6 +1,6 @@
 import { debounce } from '../utils';
-import { ENTER_KEY_CODE, PAGES, ERROR_MSG } from '../assets/constants';
-import { fetchGameData, isWon, isCorrectAnswer, calculateTimeTaken } from '../services/gameService';
+import { ENTER_KEY_CODE, PAGES, ERROR_MSG, INFO_MSG } from '../assets/constants';
+import { fetchGameData, isWon, isCorrectAnswer, calculateTimeTaken, isValidAnswer } from '../services/gameService';
 
 const API = `https://my-json-server.typicode.com/kakaopay-fe/resources/words`;
 const PLAY_BTN_ID = 'play-btn';
@@ -8,6 +8,7 @@ const ANSWER_INPUT_ID = 'answer-input';
 const TIMER_AREA_ID = 'timer-area';
 const SCORE_AREA_ID = 'score-area';
 const QUESTION_AREA_ID = 'question-area';
+const INFO_MSG_AREA_ID = 'info-msg-area';
 const PLAY_MSG = {
   PLAY: '시작',
   INIT: '초기화'
@@ -36,6 +37,7 @@ class PlayControl {
     this.questionAreaEl = document.getElementById(QUESTION_AREA_ID);
     this.playBtnEl = document.getElementById(PLAY_BTN_ID);
     this.answerInputEl = document.getElementById(ANSWER_INPUT_ID);
+    this.infoMsgAreaEl = document.getElementById(INFO_MSG_AREA_ID);
 
     this.bindOnClickPlayBtn = debounce(this.onClickPlayBtn.bind(this), BTN_DEBOUNCE_TIME);
     this.bindOnPressEnterKey = debounce(this.onPressEnterKey.bind(this), KEY_PRESS_DEBOUNCE_TIME);
@@ -53,14 +55,16 @@ class PlayControl {
     try {
       this.stopTimer();
       this.renderBlockUserInteraction();
+      this.renderInfoMsg(INFO_MSG.DATA_LOADING);
       const wordListData = await fetchGameData(API);
       if (!wordListData) throw new Error(ERROR_MSG.INIT_FAIL);
       this.initGameData(wordListData);
       this.renderInitGame();
+      this.renderInfoMsg(INFO_MSG.INIT_SUCCESS);
       console.log('게임을 초기화 완료되었습니다.', this.storeInstance.getState());
     } catch (e) {
       console.error(e.message);
-      alert(e.message);
+      this.renderInfoMsg(INFO_MSG.INIT_FAIL);
     }
   }
   initGameData(wordListData) {
@@ -83,7 +87,7 @@ class PlayControl {
       this.storeInstance.setState({ resultList: newResultList });
       this.storeInstance.setState({ score: newResultList.length });
     } else {
-      // throw error
+      this.renderInfoMsg(INFO_MSG.INIT_FAIL);
     }
   }
   runGame(round) {
@@ -113,6 +117,7 @@ class PlayControl {
     this.renderTimeLeft();
     if (this.playingTimeLeft < 1) {
       this.stopTimer();
+      this.renderInfoMsg(INFO_MSG.TIME_OVER);
       this.processPlayRounds();
       this.runGame(++this.roundCounter);
     }
@@ -128,8 +133,11 @@ class PlayControl {
       userText: userInputText,
       givenText: givenText
     };
-    const isCorrect = isCorrectAnswer(answerData);
-    return isCorrect;
+    const processedAnswer = {
+      isValid: isValidAnswer(answerData),
+      isCorrect: isCorrectAnswer(answerData)
+    };
+    return processedAnswer;
   }
   processPlayRounds() {
     const { second: givenTime } = { ...this.currentPlayingData };
@@ -166,12 +174,15 @@ class PlayControl {
     //todo: val, ver check
     if (keyCode === ENTER_KEY_CODE) {
       console.log('Enter 키 입력 받음', userInput);
-      const isCorrect = this.processAnswer();
-      if (isCorrect) {
+      const { isValid, isCorrect } = { ...this.processAnswer() };
+
+      if (isValid && isCorrect) {
         this.stopTimer();
+        this.renderInfoMsg(INFO_MSG.CORRECT_ANS);
         this.processPlayRounds();
         this.runGame(++this.roundCounter);
       } else {
+        isValid ? this.renderInfoMsg(INFO_MSG.WRONG_ANS) : this.renderInfoMsg(INFO_MSG.EMPTY_ANS);
         this.renderInitInput();
       }
     }
@@ -182,6 +193,7 @@ class PlayControl {
     const isActive = btnEl && btnEl.classList.contains('active');
     if (!isActive) {
       console.log('게임을 시작합니다.');
+      this.renderInfoMsg('');
       this.runGame(0);
     } else {
       console.log('게임을 초기화합니다.');
@@ -222,6 +234,9 @@ class PlayControl {
   renderBlockUserInteraction() {
     this.playBtnEl.disabled = true;
     this.answerInputEl.disabled = true;
+  }
+  renderInfoMsg(message) {
+    this.infoMsgAreaEl.textContent = message;
   }
   destroy() {
     console.log('[play-page]이벤트 리스너를 해제합니다.');
