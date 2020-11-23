@@ -6,7 +6,6 @@ const isValidAnswer = (data = {}) => {
   // 빈 문자열 또는 공백이 입력된 경우
   const trimedUserText = (userText && userText.length && userText.trim()) || '';
   const isValid = trimedUserText.length > 0 || false;
-  console.log(`입력값: '${userText}', trim된 입력값:'${trimedUserText}' , isValid:'${isValid}'`);
   return isValid;
 };
 const isWon = (data = {}) => {
