@@ -16,14 +16,16 @@ const PLAY_MSG = {
 const INIT_MSG = '시작 버튼으로 게임 시작';
 const INIT_STR = '--';
 const BTN_DEBOUNCE_TIME = 100;
-const KEY_PRESS_DEBOUNCE_TIME = 100;
+const KEY_PRESS_DEBOUNCE_TIME = 300;
+const MESSAGE_DELETE_DELAY_TIME = 1000;
 
 class PlayControl {
   constructor(options = {}) {
     this.storeInstance = options.storeInstance || null;
     this.maxRound = 0;
     this.roundCounter = 0;
-    this.timer = null;
+    this.countDownTimer = null;
+    this.messageTimer = null;
     this.playingTimeLeft = 0;
     this.currentPlayingData = {
       second: 0,
@@ -42,7 +44,6 @@ class PlayControl {
     this.bindOnClickPlayBtn = debounce(this.onClickPlayBtn.bind(this), BTN_DEBOUNCE_TIME);
     this.bindOnPressEnterKey = debounce(this.onPressEnterKey.bind(this), KEY_PRESS_DEBOUNCE_TIME);
     this.bindHandleTimer = this.handleTimer.bind(this);
-
     this.bindOnChangeState = this.onChangeState.bind(this);
     this.init();
   }
@@ -53,9 +54,9 @@ class PlayControl {
   }
   async initGame() {
     try {
-      this.stopTimer();
+      this.stopCountDownTimer();
       this.renderBlockUserInteraction();
-      this.renderInfoMsg(INFO_MSG.DATA_LOADING);
+      this.renderInfoMsg(INFO_MSG.DATA_LOADING, true);
       const wordListData = await fetchGameData(API);
       if (!wordListData) throw new Error(ERROR_MSG.INIT_FAIL);
       this.initGameData(wordListData);
@@ -64,7 +65,7 @@ class PlayControl {
       console.log('게임을 초기화 완료되었습니다.', this.storeInstance.getState());
     } catch (e) {
       console.error(e.message);
-      this.renderInfoMsg(INFO_MSG.INIT_FAIL);
+      this.renderInfoMsg(INFO_MSG.INIT_FAIL, true);
     }
   }
   initGameData(wordListData) {
@@ -87,7 +88,7 @@ class PlayControl {
       this.storeInstance.setState({ resultList: newResultList });
       this.storeInstance.setState({ score: newResultList.length });
     } else {
-      this.renderInfoMsg(INFO_MSG.INIT_FAIL);
+      this.renderInfoMsg(INFO_MSG.INIT_FAIL, true);
     }
   }
   runGame(round) {
@@ -103,10 +104,11 @@ class PlayControl {
     this.currentPlayingData = resultList[round];
     this.playingTimeLeft = this.currentPlayingData.second;
     this.renderStartGame();
-    this.timer = setInterval(this.bindHandleTimer, 1000);
+    this.countDownTimer = setInterval(this.bindHandleTimer, 1000);
   }
   endGame() {
-    this.stopTimer();
+    this.stopCountDownTimer();
+    this.stopMessageTimer();
     console.log('게임 종료', this.storeInstance.getState());
     this.renderInitGame();
     this.destroy();
@@ -116,15 +118,17 @@ class PlayControl {
     --this.playingTimeLeft;
     this.renderTimeLeft();
     if (this.playingTimeLeft < 1) {
-      this.stopTimer();
+      this.stopCountDownTimer();
       this.renderInfoMsg(INFO_MSG.TIME_OVER);
       this.processPlayRounds();
       this.runGame(++this.roundCounter);
     }
   }
-  stopTimer() {
-    console.log('kill timer');
-    this.timer && clearInterval(this.timer);
+  stopCountDownTimer() {
+    this.countDownTimer && clearInterval(this.countDownTimer);
+  }
+  stopMessageTimer() {
+    this.messageTimer && clearTimeout(this.messageTimer);
   }
   processAnswer() {
     const { text: givenText } = { ...this.currentPlayingData };
@@ -177,7 +181,7 @@ class PlayControl {
       const { isValid, isCorrect } = { ...this.processAnswer() };
 
       if (isValid && isCorrect) {
-        this.stopTimer();
+        this.stopCountDownTimer();
         this.renderInfoMsg(INFO_MSG.CORRECT_ANS);
         this.processPlayRounds();
         this.runGame(++this.roundCounter);
@@ -193,7 +197,7 @@ class PlayControl {
     const isActive = btnEl && btnEl.classList.contains('active');
     if (!isActive) {
       console.log('게임을 시작합니다.');
-      this.renderInfoMsg('');
+      this.renderInfoMsg();
       this.runGame(0);
     } else {
       console.log('게임을 초기화합니다.');
@@ -235,8 +239,15 @@ class PlayControl {
     this.playBtnEl.disabled = true;
     this.answerInputEl.disabled = true;
   }
-  renderInfoMsg(message) {
+  renderInfoMsg(message, disableInitTimer) {
     this.infoMsgAreaEl.textContent = message;
+    if (!disableInitTimer) {
+      this.stopMessageTimer(message);
+      this.messageTimer = setTimeout(this.renderInitInfoMsg.bind(this), MESSAGE_DELETE_DELAY_TIME);
+    }
+  }
+  renderInitInfoMsg() {
+    this.infoMsgAreaEl.textContent = '';
   }
   destroy() {
     console.log('[play-page]이벤트 리스너를 해제합니다.');
