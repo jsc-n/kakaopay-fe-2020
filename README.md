@@ -71,7 +71,7 @@ Store.js
 
 gameService.js
 
-- 평균시간 계산, 문제를 푸는데 걸린시간 계산, 정답을 맞춰는 지 처리, api fetch 등 비지니스 로직에 대한 함수들 정의.
+- 입력 validation check, 평균시간 계산, 문제를 푸는데 걸린시간 계산, 정답을 맞춰는 지 처리, api fetch 등 비지니스 로직에 대한 함수들 정의.
 
 ### 테스트 시나리오
 
@@ -82,6 +82,9 @@ gameService.js
 - 테스트 시나리오
   - 주어진 시간 안에 정답을 입력하지 못한 경우
   - 주어진 시간 안에 정답을 입력한 경우
+  - 유저가 입력한 단어가 공백일 경우
+  - 유저가 입력한 단어가 empty string 인 경우
+  - 유저가 입력한 단어가 validate한 string 인 경우
   - 유저가 입력한 단어가 정답이 아닌 경우
   - 유저가 입력한 단어가 정답인 경우
   - 평균 시간을 계산할때 주어진 시간 보다 걸린 시간이 더 긴 경우
@@ -91,7 +94,7 @@ gameService.js
   - 게임 문제를 가져오는 api 의 response 형식이 사전 정의된 형식과 다른 경우
   - 각 함수 별 파라미터 validation 테스트
 - 샘플 테스트 결과물  
-  ![test_result](https://user-images.githubusercontent.com/74660746/99907201-d1610f80-2d1e-11eb-8852-dd69a9081aea.png)
+  ![test_result](https://user-images.githubusercontent.com/74660746/99955388-9b2b9a80-2dc7-11eb-888c-8d0b3b5e7265.png)
 
 ## 기타
 
