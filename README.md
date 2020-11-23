@@ -20,7 +20,7 @@ Typing Game(타자게임) 구현
 
 ### 프로젝트 설계 구조
 
-![architecture](https://user-images.githubusercontent.com/74660746/99907779-26eaeb80-2d22-11eb-81ea-a85dd45a3394.png)
+![architecture](https://user-images.githubusercontent.com/74660746/99956498-7506fa00-2dc9-11eb-9ae8-7adeef7bfeac.png)
 
 메인 컴포넌트 및 모듈 간략 설명
 
