@@ -1,20 +1,8 @@
 @import '../base/common.scss';
-
 #home-page {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  // justify-content: space-around;
-  width: 400px;
-  height: 500px;
-  border: 1px solid black;
-  padding: 10px;
-  box-sizing: border-box;
-
+  @include pageLayout;
   header {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
+    @include alignRow;
     justify-content: space-between;
     margin: 10px 0px;
     div {
@@ -28,12 +16,7 @@
     }
   }
   main {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    width: 100%;
-    height: 250px;
-    margin: 20px 0px;
+    @include mainLayout;
     section {
       input {
         @include input;
@@ -41,9 +24,6 @@
     }
     #question-wrapper {
       margin: 0px 30px;
-      #question-area {
-        text-align: center;
-      }
     }
     #answer-wrapper {
       margin: 0px 30px;
@@ -52,10 +32,8 @@
       margin: 0px 70px;
     }
     #info-msg-wrapper {
+      margin: 0px 30px;
       height: 20px;
-      #info-msg-area {
-        text-align: center;
-      }
     }
     button {
       @include button;
@@ -64,7 +42,7 @@
       @include active;
     }
     button:disabled {
-      background-color: #999;
+      @include disabledButton;
     }
   }
 }

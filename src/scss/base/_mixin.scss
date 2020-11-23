@@ -1,18 +1,34 @@
 /* text style */
-$fontBlack100: rgba(0, 0, 0, 1);
-$colorPrimaryPress: #d81d16;
+$colorPrimary: #d81d16;
 $colorSecondary: #b98d70;
 $colorBtnFont: white;
 
-$gap: 50px;
-$gap40: 40px;
-
-@mixin verticalCenter {
+@mixin alignColume {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
 }
-
+@mixin alignRow {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+@mixin pageLayout {
+  @include alignColume;
+  border: 1px solid black;
+  width: 400px;
+  height: 500px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+@mixin mainLayout {
+  @include alignColume;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 250px;
+  margin: 20px 0px;
+  text-align: center;
+}
 @mixin titBig {
   font-size: 25px;
   line-height: 26px;
@@ -56,9 +72,12 @@ $gap40: 40px;
   padding: 0 23px 0 28px;
   border: 0;
   border-radius: 20px;
-  background-color: $colorPrimaryPress;
+  background-color: $colorPrimary;
   color: $colorBtnFont;
   outline: 0;
+}
+@mixin disabledButton {
+  background-color: #999;
 }
 
 @mixin active {
