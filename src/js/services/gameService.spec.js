@@ -1,7 +1,44 @@
 var assert = require('assert');
-import { isWon, isCorrectAnswer, calculateTimeTaken, calculateAverageTime, fetchGameData } from '../services/gameService';
+import { isValidAnswer, isWon, isCorrectAnswer, calculateTimeTaken, calculateAverageTime, fetchGameData } from '../services/gameService';
 import { ERROR_MSG, API } from '../assets/constants';
 describe('gameService module test', function() {
+  describe('[isValidAnswer] function test', function() {
+    it('expect to throw error, when param is (null)', function() {
+      try {
+        const result = isValidAnswer();
+      } catch (e) {
+        assert.equal(e.message, ERROR_MSG.INVALID_PARAM);
+      }
+    });
+    it('expect to throw error, when param is (empty json)', function() {
+      try {
+        const result = isValidAnswer({});
+      } catch (e) {
+        assert.equal(e.message, ERROR_MSG.INVALID_PARAM);
+      }
+    });
+    it('expect to return false, when user input is empty string', function() {
+      const data = {
+        userText: ''
+      };
+      const result = isValidAnswer(data);
+      assert.equal(result, false);
+    });
+    it('expect to return false, when user input is space char', function() {
+      const data = {
+        userText: '    '
+      };
+      const result = isValidAnswer(data);
+      assert.equal(result, false);
+    });
+    it('expect to return true, when user input is any char, but not space', function() {
+      const data = {
+        userText: 'kakaopay'
+      };
+      const result = isValidAnswer(data);
+      assert.equal(result, true);
+    });
+  });
   describe('[isWon] function test', function() {
     it('expect to throw error, when param is (null)', function() {
       try {
